@@ -1,14 +1,8 @@
 #!/usr/bin/python
 __doc__ = """
-[KDM 12-12-2014]
-
 This module interacts with the PubChem RESTful web
-service (PUG) and constructs a custom python object
-with the returned data.
-   
-Contributor: Kyle Marshall
-kyle.marshall@schrodinger.com
-Copyright 2014 Schrodinger LLc, All Rights Reserved
+service (PUG) and constructs a custom python dictionary
+of useful data.
 """
 ###############################################################################
 # Packages

@@ -1,8 +1,8 @@
 #!/usr/bin/python
 __doc__ = """
-This module interacts with the PubChem RESTful web
-service (PUG) and constructs a custom python dictionary
-of useful data.
+    This module interacts with the PubChem RESTful web
+    service (PUG) and constructs a custom python dictionary
+    of useful data.
 """
 ###############################################################################
 # Packages
@@ -34,7 +34,7 @@ class PubChem(object):
     focuses on commercially available compounds and their vendors, along
     with any patent or publication data the compound might be found in.
     """
-    def __init__(self,smiles):
+    def __init__(self, smiles):
         """
         If the searched SMILES returns a PubChem ID, construct
         the object. If not, fill the object with null data.
@@ -245,8 +245,13 @@ class PubChem(object):
         if response.text == "":
             return []
         else:
-            return json.loads(response.text)['DDOutput']['pages']['content']
-
+            #check if in json format
+            if response.text[0] == '{':
+                return json.loads(response.text)['DDOutput']['pages']['content']
+            # might be jsonp
+            else:
+                json_format = response.text[response.text.find('(') + 1: -2]
+                return json.loads(json_format)['DDOutput']['pages']['content']
 
     def _get_pubchem_articles(self):
         """
@@ -266,7 +271,13 @@ class PubChem(object):
         if response.text == "":
             return []
         else:
-            article_list = json.loads(response.text)['DDOutput']['pages']['content']
+            #check if in json format
+            if response.text[0] == '{':
+                article_list = json.loads(response.text)['DDOutput']['pages']['content']
+            # might be jsonp
+            else:
+                json_format = response.text[response.text.find('(') + 1: -2]
+                article_list = json.loads(json_format)['DDOutput']['pages']['content']
             #Remove below 3 lines if want article abstract and publication journal details returned.
             for item in article_list:
                 if 'articleabstract' in item: del item['articleabstract']
